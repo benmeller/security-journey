@@ -6,8 +6,6 @@ const posts = (await getCollection('blog')).filter(
         post.data.draft?.valueOf() !== true
             && post.slug
     )
-).sort(
-	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
 ---
 

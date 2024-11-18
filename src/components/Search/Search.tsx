@@ -1,64 +1,70 @@
 import Fuse from 'fuse.js';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+
+// TODO: useRef() modal popup (to embed search in header)
+// TODO: Pretty search UI
+// TODO: Show matched portions of content instead of page description
+// TODO: Add type safety
+// TODO: Separate search page (for share-ability)
 
 const options = {
-	keys: [
-        { 
-            name: 'data.title', 
-            weight: 1
-        },
-        { 
-            name: 'data.description', 
-            weight: 0.75
-        },
-        { 
-            name: 'body', 
-            weight: 0.5
-        },
-    ],
+	keys: ['title', 'description', 'content'],
+	ignoreLocation: true,
 	includeMatches: true,
+	includeScore: true,
 	minMatchCharLength: 2,
-	threshold: 0.5,
-    includeScore: true,
+	threshold: 0.2,
 };
 
 export default function Search({ searchList }: { searchList?: any}) {
-    // TODO: useRef() modal popup (to embed search in header)
-    // TODO: Add type safety
-    // TODO: search.json endpoint and separate search page (for share-ability)
-    const [query, setQuery] = useState("");
-    const fuse = new Fuse(searchList, options)
+	const [query, setQuery] = useState('');
+	const [results, setResults] = useState([]);
+	const [fuse, setFuse] = useState(null);
 
-    console.log(searchList);
-    console.log(query);
+	useEffect(() => {
+		// Fetch the JSON data
+		fetch('/api/posts.json')
+			.then(res => res.json())
+			.then(data => { 
+				setFuse(new Fuse(data, options)); 
+				console.log('all data');
+				console.log(data);
+			})
+	}, []);
 
-    const searchResult = fuse
-		.search(query)
-    const posts = searchResult.map((result) => result.item)
-		.slice(0, 5);
 
-    console.log(searchResult);
 
 	function handleOnSearch({ target = {} }) {
 		const { value } = target;
 		setQuery(value);
+		if (fuse) {
+			const searchResults = fuse.search(value);
+			setResults(searchResults.map(result => result.item));
+			console.log('results');
+			console.log(searchResults);
+		}
 	}
 
     return (
 		<>
 			<label>Search</label>
-			<input type="text" value={query} onChange={handleOnSearch} placeholder="Search posts" />
+			<input 
+				type="text" 
+				value={query} 
+				onChange={handleOnSearch} 
+				placeholder="Search posts" 
+			/>
 			{query.length > 1 && (
 				<p>
-					Found {posts.length} {posts.length === 1 ? 'result' : 'results'} for '{query}'
+					Found {results.length} {results.length === 1 ? 'result' : 'results'} for '{query}'
 				</p>
 			)}
 			<ul>
-				{posts &&
-					posts.map((post) => (
+				{results &&
+					results.map((item) => (
 						<li>
-							<a href={`/${post.slug}`}>{post.data.title}</a>
-							{post.data.description}
+							<a href={`/${item.slug}`}>{item.title}</a>
+							{item.description}
 						</li>
 					))}
 			</ul>
