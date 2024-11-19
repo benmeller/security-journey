@@ -142,7 +142,7 @@ blockquote {
 	font-size: 1.333em;
 }
 hr {
-	border: none;
+	margin-bottom: 2rem;
 	border-top: 1px solid rgb(var(--gray-light));
 }
 @media (max-width: 720px) {
