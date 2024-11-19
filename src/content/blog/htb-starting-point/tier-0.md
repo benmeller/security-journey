@@ -26,7 +26,11 @@ sudo openvpn <conf>.ovpn
 ssh <ip>
 ```
 
+---
+
 ## Meow
+
+Telnet, nmap
 
 **Task 1**  
 What does the acronym VM stand for?
@@ -88,7 +92,11 @@ Submit flag
 cat flag.txt
 ```
 
+---
+
 ## Fawn
+
+ftp, nmap
 
 **Task 1**  
 What does the 3-letter acronym FTP stand for?
@@ -166,3 +174,83 @@ What is the command used to download the file we found on the FTP server?
 Submit root flag
 
 `get flag.txt`
+
+---
+
+## Dancing
+
+SMB, nmap
+
+**Task 1**
+What does the 3-letter acronym SMB stand for?
+
+Server Message Block
+
+
+**Task 2**
+What port does SMB use to operate at?
+
+445
+
+
+**Task 3**
+What is the service name for port 445 that came up in our Nmap scan?
+
+```bash
+$ nmap -p445 <ip>
+
+PORT    STATE SERVICE
+445/tcp open  microsoft-ds
+```
+
+
+
+
+**Task 4**
+What is the 'flag' or 'switch' that we can use with the smbclient utility to 'list' the available shares on Dancing?
+
+`-L`
+
+
+**Task 5**
+How many shares are there on Dancing?
+
+```bash
+$ smbclient -L <ip> -N
+
+Sharename       Type      Comment
+---------       ----      -------
+ADMIN$          Disk      Remote Admin
+C$              Disk      Default share
+IPC$            IPC       Remote IPC
+WorkShares      Disk    
+```
+
+`-L` to list, `-N` to suppress password prompt. 
+
+4 shares
+
+
+**Task 6**
+What is the name of the share we are able to access in the end with a blank password?
+
+```bash
+smbclient //<ip>/WorkShares -N
+
+smb: \>
+```
+
+WorkShares!
+
+**Task 7**
+What is the command we can use within the SMB shell to download the files we find?
+
+`get`
+
+
+**Task 8**
+Submit root flag
+
+```bash
+get James.P/flag.txt
+```
