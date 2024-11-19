@@ -14,6 +14,49 @@ So begins my journey into HTB. I am starting right at the beginning. It means th
 
 It will also include some work with `nmap` and `MongoDB`
 
+## Summmary
+
+Tier 0 covers the very basics of the protocols Telnet, SMB and FTP, as well as a basic introduction to nmap and Redis. When trying to hit a box, a connectivity test is always helpful, using `ping`. Below are some of the highlights:
+
+### 1. `nmap`
+
+`nmap` is the go to scanning tool. For these boxes, we only used it for port scanning. By default, nmap only scans the first 1000 ports.
+
+These are the main options used in this tutorial:
+* `-sV`: Scan for service and version. Takes a little longer
+* `-p{x}-{y}` or `-p{x}`: Specify port(s) to scan
+* `--min-rate=x` or `-T5`: Specify minimum number of packets to send per second, or use a speed template (0-5). It is worth noting I didn't have as much success with the speed templates.
+* `-sC`: Default script scan. Checks for a bunch of services
+* `-F`: Fast scan to check the most common ports
+* `-A`: enable OS detection, version detection, script scanning, and traceroute
+
+<br />
+
+### 2. Protocols (Telnet, SMB, FTP)
+
+```bash
+telnet <host>
+ftp <host>
+smbclient <host>
+```
+
+FTP is unencrypted, sFTP is an extension of ssh to securely transfer files. You can try log in to an ftp server as user `anonymous` and simply enter an empty password. This may let you in. A status code of `230` indicates a successful login
+
+`smbclient` is useful for connecting to Server Message Block servers. It can list out shares and prompt for credentials. Handy flag for us is `-N` to suppress the password prompt
+
+
+### 3. Redis
+
+Redis is an in-memory db. It is flat and doesn't have indexes. It stores everything as a key-value pair (where the key is a string and the value can be any object/document). Redis typically operates on port 6379. Can interact with it via the `redis-cli` and the server commands. N.b. that the server cli is not that helpful, so it is good to keep google and their docs on hand to look things up. Some of the server commands that are useful:
+* `INFO` returns server info
+* `SELECT` chooses an index. 
+* `KEYS *` retrieves all keys
+* `GET <key>` retrieves the value for a given key
+
+<br />
+
+---
+
 ## Connection  
 Use OpenVPN with the `.ovpn` file they provide. Once on their network, you can ssh into the machine
 
@@ -242,7 +285,6 @@ $ nmap $TARGET -p1-10000 --min-rate=5000
 
 PORT     STATE    SERVICE
 6379/tcp open     redis
-6621/tcp filtered kftp
 ```
 
 

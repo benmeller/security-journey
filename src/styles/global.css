@@ -58,7 +58,7 @@ body {
 	word-wrap: break-word;
 	overflow-wrap: break-word;
 	color: rgb(var(--gray-dark));
-	font-size: 20px;
+	font-size: 18px;
 	line-height: 1.7;
 }
 main {
@@ -75,22 +75,25 @@ h5,
 h6 {
 	margin: 0 0 0.5rem 0;
 	color: rgb(var(--black));
-	line-height: 1.2;
+	line-height: 1.0;
 }
 h1 {
-	font-size: 3.052em;
+	font-size: 2.5em;
 }
 h2 {
-	font-size: 2.441em;
+	font-size: 2em;
 }
 h3 {
-	font-size: 1.953em;
+	font-size: 1.5em;
 }
 h4 {
-	font-size: 1.563em;
+	font-size: 1.17em;
 }
 h5 {
-	font-size: 1.25em;
+	font-size: 1em;
+}
+h6 {
+	font-size: 0.83em;
 }
 strong,
 b {
