@@ -2,6 +2,7 @@
 import HeaderLink from './HeaderLink.astro';
 import { SITE_TITLE } from '../consts';
 import ThemeIcon from './ThemeIcon.astro';
+import SearchWidget from './Search/SearchWidget.astro';
 ---
 
 <header>
@@ -13,6 +14,7 @@ import ThemeIcon from './ThemeIcon.astro';
 			<HeaderLink href="/about">About</HeaderLink>
 		</div>
 		<div class="social-links">
+			<SearchWidget />
 			<ThemeIcon />
 			<a href="https://github.com/benmeller" target="_blank">
 				<span class="sr-only">Go to Ben's GitHub profile</span>
