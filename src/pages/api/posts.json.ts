@@ -11,7 +11,8 @@ export async function GET() {
     const searchablePosts = posts.map(post => ({
         title: post.data.title,
         description: post.data.description,
-        content: removeMarkdown(post.body).replaceAll('\n', '  ')
+        content: removeMarkdown(post.body).replaceAll('\n', '  '),
+        slug: `blog/${post.slug}`
     }));
 
     return new Response (
