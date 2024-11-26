@@ -4,6 +4,12 @@
   License MIT: https://github.com/HermanMartinus/bearblog/blob/master/LICENSE.md
  */
 
+ /** 
+  * TODO:
+  * - quote styling smaller
+  * - All text smaller
+  **/
+
 :root {
 	--background-color: #fff;
 	background-color: var(--background-color);
