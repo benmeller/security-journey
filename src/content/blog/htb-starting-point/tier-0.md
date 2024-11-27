@@ -30,7 +30,6 @@ These are the main options used in this tutorial:
 * `-F`: Fast scan to check the most common ports
 * `-A`: enable OS detection, version detection, script scanning, and traceroute
 
-<br />
 
 ### 2. Protocols (Telnet, SMB, FTP)
 
