@@ -8,7 +8,7 @@ heroImage: '/blog-placeholder-2.jpg'
 Topics covered:  
 * SQLi
 * Server side template injection
-* Remote file includsion
+* Remote file inclusion
 * Web/reverse shells
 * Navigating Jenkins
 * S3
@@ -445,10 +445,11 @@ responder\administrator
 *Evil-WinRM* PS C:\Users\> cat mike/Desktop/flag.txt
 <flag>
 ```
-ea81b7afddd03efaa0945333ed147fac
 
 ### Harvesting NTLM Credentials 
-**Responder Challenge Capture - Utilising `Responder`, `SMB` and Local File Inclusion**  
+**Responder Challenge Capture - Utilising `Responder`, `SMB` and Remote File Inclusion**  
+
+To summarise this challenge, we first exploit a PHP app that is unsafely using the `include()` function. We then attempt to utilise remote file inclusion to capture some NTLM credentials. We do this by triggering an SMB request back to our host machine. We capture the credentials by using `Responder` which is listening for SMB connections.
 
 #### The NTLM Protocol 
 
