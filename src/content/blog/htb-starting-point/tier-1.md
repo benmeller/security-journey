@@ -356,7 +356,7 @@ PHP. (Examine the index page redirecting to the domain)
 >
 > I was unable to view any site content - the dns kept erroring out. If I had done an nmap scan at the start, I would have known that the web service was on port 80 (beyond simply assuming it was and seeing the server perform a redirect). 
 >
-> Looking at the official writeup, it went on to explain the server was using name-based virtual hosting. This is where multiple multiple domains can be hosted on the same machine and each domain is able to handle their request separately. I've come across this concept before with services like `Coolify` though didn't know how it worked or what is was called. It allows one server to share the resources for multiple hostnames. The web server knows which service to hand the request to based on the domain name found in the `Host` HTTP header. 
+> Looking at the official writeup, it went on to explain the server was using name-based virtual hosting. This is where multiple domains can be hosted on the same machine and each domain is able to handle their request separately. I've come across this concept before with services like `Coolify` though didn't know how it worked or what it was called. It allows one server to share the resources for multiple hostnames. The web server knows which service to hand the request to based on the domain name found in the `Host` HTTP header. 
 >
 > The fix for me is to manually add it to my `/etc/hosts` file
 
@@ -383,6 +383,11 @@ This exploit works on the unika.htb site. I assume this is working because php s
 Which of the following values for the `page` parameter would be an example of exploiting a Remote File Include (RFI) vulnerability: "french.html", "//10.10.14.6/somefile", "../../../../../../../../windows/system32/drivers/etc/hosts", "minikatz.exe"  
 `//10.10.14.6/somefile`
 
+> **Learning Opportunity**
+>
+> This format is called the Universal Naming Convention. It is useful for identifying servers and resources on a LAN. Windows uses backslashes, UNIX forward slashes. N.b. in DOS/Windows, this UNC doesn't include the drive, e.g. `c:\` or `d:\`. By default, Windows attempts to resolve UNC paths using the the SMB protocol. Other protocols that can resolve UNC paths includes WebDAV
+>
+> For this RFI to work, PHP must have `allow_url_include` enabled.
 
 **Task 6**  
 What does NTLM stand for?  
@@ -395,7 +400,11 @@ Which flag do we use in the Responder utility to specify the network interface?
 
 > **Learning Opportunity** 
 >
-> Responder is a tool that can gather hashed credentials used in NTLM and facilitate relay attacks. It targets the protocols Link-Local Multicast Name Resolution (LLMNR), NetBIOS Name Service (NBT-NS) and Multicast DNS (MDNS).
+> Responder is a tool that can gather hashed credentials used in NTLM and facilitate relay attacks. It targets the protocols Link-Local Multicast Name Resolution (LLMNR), NetBIOS Name Service (NBT-NS) and Multicast DNS (MDNS). 
+>
+> LLMNR is Windows component that acts as a host discovery method. You may particularly see this used in AD environments
+>
+> We can use Responder for either sniffing or spoofing. It can listen in on interactions to e.g. an SMB share. Alternatively, it can respond to host discovery queries by saying "yes, I am that server, send me your details". In this way, we can use Responder to gather credentials to be cracked later on 
 
 
 **Task 8**  
@@ -407,7 +416,7 @@ There are several tools that take a NetNTLMv2 challenge/response and try million
 What is the password for the administrator user?  
 
 Potential approaches to this task:
-* Local file inclusion to expose /etc/shadow file to identify admin user
+* Local file inclusion to expose /etc/shadow file to identify admin user. (n.b. in retrospect, Windows doesn't have a shadow file! It stores NTLM hashes in SAM/AD)
 * `responder` tool to capture NTLM hash and trigger a page load...?
 
 I had to refer to the writeup as my knowledge was not there. See below (after the tasks) for notes of my learning.
