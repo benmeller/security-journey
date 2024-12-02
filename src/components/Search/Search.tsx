@@ -1,5 +1,6 @@
 import Fuse from 'fuse.js';
 import { useState, useEffect, useRef } from 'react';
+import Styles from './search.module.css'
 
 // TODO: Show matched portions of content instead of page description
 // TODO: Add type safety
