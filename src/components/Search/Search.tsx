@@ -1,6 +1,6 @@
 import Fuse from 'fuse.js';
 import React, { useState, useEffect, useRef } from 'react';
-import Styles from './search.module.css'
+import styles from './search.module.css'
 
 // TODO: Show matched portions of content instead of page description
 // TODO: Add type safety
@@ -102,22 +102,23 @@ export default function Search({ searchList }: { searchList?: any}) {
 					<path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"></path>
 				</svg>
 			</button>
-			<dialog ref={searchRef} onKeyDown={handleDialogKeyDown} onClick={handleDialogClick}
-			>
-				<div>
-					<label>Search</label>
+			<dialog ref={searchRef} onKeyDown={handleDialogKeyDown} onClick={handleDialogClick} >
+				<div className={`${styles.dialogContent}`}>
+					{/* <label>Search</label> */}
 					<input 
 						type="text" 
 						value={query} 
 						onChange={handleOnSearch} 
 						placeholder="Search posts" 
+						className={`${styles.searchInput}`}
+						aria-label='Search input'
 					/>
 					{query.length > 1 && (
 						<p>
 							Found {results.length} {results.length === 1 ? 'result' : 'results'} for '{query}'
 						</p>
 					)}
-					<ul>
+					<ul className={`${styles.searchResults}`}>
 						{results &&
 							results.map((item) => (
 								<li>
