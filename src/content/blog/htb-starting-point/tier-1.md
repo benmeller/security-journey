@@ -13,6 +13,21 @@ Topics covered:
 * Navigating Jenkins
 * S3
 
+## Summary
+
+Todo: summarise the boxes and the main techniques for exploiting them
+
+Key learnings:
+* Reconnaissance and enumeration. nmap everything. Use Wappalyzer on sites. gobuster for site enumeration
+* MySQL basics
+* FTP basics
+* Name-based virtual hosting (incl. changes to /etc/hosts and vhost enumeration)
+* LFI/RFI
+* Responder
+* Harvesting NTLM creds
+* Simple reverse shell (incl. netcat, http server and bash script)
+
+
 ---
 
 ## Appointment  
@@ -671,3 +686,17 @@ cat flag.txt
 ```
 
 *TODO: Revise this exploit, to ensure I understand every step*
+
+### Reverse Shell Utilising PHP and Bash 
+**Obtain a reverse shell by arbitrary command execution in PHP**
+
+Summary here
+
+#### PHP File
+Arbitrary command execution. Alternative options for PHP reverse shells. Seems like it can be done in PHP alone
+
+#### Bash script
+
+
+#### Exploit
+http server, netcat, curl request
