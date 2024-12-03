@@ -7,27 +7,40 @@
 :root {
 	--background-color: #fff;
 	background-color: var(--background-color);
-	--accent: #2337ff;
+	--accent: #2589BD;
 	--accent-dark: #000d8a;
 	--black: 15, 18, 25;
 	--gray: 96, 115, 159;
-	--gray-light: 229, 233, 240;
-	--gray-dark: 34, 41, 57;
+	--gray-light: rgb(229, 233, 240);
+	--gray-dark: rgb(34, 41, 57);
 	--gray-gradient: rgba(var(--gray-light), 50%), #fff;
+	--text-color: #000;
+	color: var(--text-color);
 	--box-shadow: 0 2px 6px rgba(var(--gray), 25%), 0 8px 24px rgba(var(--gray), 33%),
 		0 16px 32px rgba(var(--gray), 33%);
+	--screen-sm: 640px;
+	--screen-md: 768px;
+	--screen-lg: 1024px;
+	--screen-xl: 1280px;
+	box-sizing: border-box;
+}
+
+*, *:before, *:after {
+	box-sizing: inherit;
 }
 
 html.dark {
 	--background-color: #222939;
-	color: #fff;
-	--accent: #969fff;
+	--background-color-rgb-values: 34, 41, 57;
+	--text-color: #fff;
+	color: var(--text-color);
+	--accent: #2589BD;
 	--accent-dark: #aaacb9;
 	--black: 255, 255, 255;
-	--gray: 200, 215, 255;
-	--gray-dark: 229, 233, 240;
-	--gray-light: 34, 41, 57;
-	--gray-gradient: #000, rgba(var(--gray-light), 50%);
+	--gray: 174, 184, 211;
+	--gray-dark: rgb(229, 233, 240);
+	--gray-light: rgb(14, 20, 32);
+	--gray-gradient: #000, rgba(var(--background-color-rgb-values), 50%);
 }
 
 .dark .nav-links a {
@@ -53,12 +66,11 @@ body {
 	margin: 0;
 	padding: 0;
 	text-align: left;
-	/* TODO: fix gradient */
 	background: linear-gradient(var(--gray-gradient)) no-repeat;
 	background-size: 100% 600px;
 	word-wrap: break-word;
 	overflow-wrap: break-word;
-	color: rgb(var(--gray-dark));
+	color: var(--gray-dark);
 	font-size: 18px;
 	line-height: 1.7;
 }
@@ -129,7 +141,7 @@ img {
 }
 code {
 	padding: 2px 5px;
-	background-color: rgb(var(--gray-light));
+	background-color: var(--gray-light);
 	border-radius: 2px;
 }
 pre {
@@ -149,7 +161,7 @@ blockquote {
 }
 hr {
 	margin-bottom: 2rem;
-	border-top: 1px solid rgb(var(--gray-light));
+	border-top: 1px solid var(--gray-light);
 }
 button {
 	cursor: pointer;
