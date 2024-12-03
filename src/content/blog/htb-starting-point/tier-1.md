@@ -208,7 +208,7 @@ PORT   STATE SERVICE
 | ftp-syst:
 |   STAT:
 | FTP server status:
-|      Connected to ::ffff:10.10.15.188
+|      Connected to ::ffff:$HOST_IP
 |      Logged in as ftp
 |      TYPE: ASCII
 |      No session bandwidth limit
@@ -506,7 +506,7 @@ N.b. The exploit used in this HTB challenge didn't utilise this poisoning (i.e. 
 ---
 
 ## Three
-**
+*Subdomain enumeration, S3 traversal, PHP, Bash, reverse shell*
 
 **Task 1**  
 How many TCP ports are open?  
@@ -537,8 +537,8 @@ In the absence of a DNS server, which Linux file can we use to resolve hostnames
 **Task 4**  
 Which sub-domain is discovered during further enumeration?  
 
-Website enumeration can be done using gobuster. Will try its DNS enumeration mode (after adding `thetoppers.htb` to my `/etc/hosts` file):
-```
+Website enumeration can be done using gobuster. Will try its DNS enumeration mode (after adding `thetoppers.htb` to my `/etc/hosts` file):  
+```bash
 $ gobuster dns -d thetoppers.htb -w ~/Documents/git/SecLists/Discovery/DNS/shubs-subdomains.txt
 ```
 
@@ -576,6 +576,10 @@ What is the command used by the above utility to list all of the S3 buckets?
 **Task 9**  
 This server is configured to run files written in what web scripting language?    
 `php`
+
+> **Learning opportunity**
+>
+> There is a browser extension called Wappalyzer. It can be used to identify all the different components that a website is using, such as programming language(s), web servers, cdns, operating systems, etc.
 
 
 **Task 10**  
