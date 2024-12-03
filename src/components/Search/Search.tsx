@@ -1,5 +1,5 @@
 import Fuse from 'fuse.js';
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Styles from './search.module.css'
 
 // TODO: Show matched portions of content instead of page description
@@ -22,39 +22,12 @@ export default function Search({ searchList }: { searchList?: any}) {
 	const searchRef = useRef<HTMLDialogElement | null>(null);
 	const [isOpen, setIsOpen] = useState(false);
 
-	useEffect(() => {
-		// Fetch the JSON data
-		fetch('/api/posts.json')
-			.then(res => res.json())
-			.then(data => { 
-				setFuse(new Fuse(data, options)); 
-				console.log('all data');
-				console.log(data);
-			})
-	}, []);
-
-	useEffect(() => {
-		// Open/close search dialog
-		const searchDialog = searchRef.current;
-		if (!searchDialog) {
-			return;
-		}
-
-		if (isOpen) {
-			searchDialog.showModal();
-		} else {
-			searchDialog.close();
-		}
-	}, [isOpen]);
-
 	function handleOnSearch({ target = {} }) {
 		const { value } = target;
 		setQuery(value);
 		if (fuse) {
 			const searchResults = fuse.search(value);
 			setResults(searchResults.map(result => result.item));
-			console.log('results');
-			console.log(searchResults);
 		}
 	}
 
@@ -65,7 +38,7 @@ export default function Search({ searchList }: { searchList?: any}) {
 		setIsOpen(false);
 	};
 
-	const handleKeyDown = (event: React.KeyboardEvent<HTMLDialogElement>) => {
+	const handleDialogKeyDown = (event: React.KeyboardEvent<HTMLDialogElement>) => {
 		if (event.key === "Escape") {
 		  	handleCloseModal();
 		}
@@ -76,6 +49,42 @@ export default function Search({ searchList }: { searchList?: any}) {
 			handleCloseModal();
 		}
 	}
+	
+	const handleKeyDown = (event: React.KeyboardEvent) => {
+		if (event.metaKey && event.key.toLowerCase() === 'k') {
+			setIsOpen(oldIsOpen => !oldIsOpen);
+	  }
+	}
+
+	useEffect(() => {
+		// Fetch the JSON data
+		fetch('/api/posts.json')
+			.then(res => res.json())
+			.then(data => { 
+				setFuse(new Fuse(data, options)); 
+			})
+	}, []);
+
+	// Open/close search dialog
+	useEffect(() => {
+		const searchDialog = searchRef.current;
+		if (!searchDialog) {
+			return;
+		}
+		if (isOpen) {
+			searchDialog.showModal();
+		} else {
+			searchDialog.close();
+		}
+	}, [isOpen]);
+
+	// Listen for keyboard event to open/close search
+	useEffect(() => {
+		window.addEventListener('keydown', handleKeyDown);
+		return () => {
+			window.addEventListener('keydown', handleKeyDown);
+		}
+	}, [])
 
 	// TODO: add close button to modal
 	// TODO: add styling
@@ -93,7 +102,7 @@ export default function Search({ searchList }: { searchList?: any}) {
 					<path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"></path>
 				</svg>
 			</button>
-			<dialog ref={searchRef} onKeyDown={handleKeyDown} onClick={handleDialogClick}
+			<dialog ref={searchRef} onKeyDown={handleDialogKeyDown} onClick={handleDialogClick}
 			>
 				<div>
 					<label>Search</label>
