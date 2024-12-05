@@ -143,6 +143,7 @@ code {
 	padding: 2px 5px;
 	background-color: var(--gray-light);
 	border-radius: 2px;
+	font-size: 0.85em;
 }
 pre {
 	padding: 1.5em;
