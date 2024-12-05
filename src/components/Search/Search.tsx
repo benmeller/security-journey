@@ -1,6 +1,7 @@
 import Fuse from 'fuse.js';
 import React, { useState, useEffect, useRef } from 'react';
 import styles from './search.module.css'
+import SearchResult from './SearchResult';
 
 // TODO: Show matched portions of content instead of page description
 // TODO: Add type safety
@@ -17,6 +18,7 @@ const options = {
 
 export default function Search({ searchList }: { searchList?: any}) {
 	const [query, setQuery] = useState('');
+	// TODO: Add type safety to SearchResults
 	const [results, setResults] = useState([]);
 	const [fuse, setFuse] = useState(null);
 	const searchRef = useRef<HTMLDialogElement | null>(null);
@@ -27,7 +29,7 @@ export default function Search({ searchList }: { searchList?: any}) {
 		setQuery(value);
 		if (fuse) {
 			const searchResults = fuse.search(value);
-			setResults(searchResults.map(result => result.item));
+			setResults(searchResults);
 		}
 	}
 
@@ -113,18 +115,15 @@ export default function Search({ searchList }: { searchList?: any}) {
 						className={`${styles.searchInput}`}
 						aria-label='Search input'
 					/>
-					{query.length > 1 && (
+					{query.length >= 1 && (
 						<p>
 							Found {results.length} {results.length === 1 ? 'result' : 'results'} for '{query}'
 						</p>
 					)}
 					<ul className={`${styles.searchResults}`}>
 						{results &&
-							results.map((item) => (
-								<li>
-									<a href={`/${item.slug}`}>{item.title}</a>
-									{item.description}
-								</li>
+							results.map((result) => (
+								<SearchResult result={result} />
 							))}
 					</ul>
 				</div>
