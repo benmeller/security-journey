@@ -1,3 +1,5 @@
+import styles from './searchResult.module.css';
+
 interface Item {
     title: string,
     description: string,
@@ -15,9 +17,17 @@ export default function SearchResult({ result }: SearchResult) {
     const { item, matches } = result
     console.log(result);
     return (
-        <li>
-            <a href={`/${item.slug}`}>{item.title}</a>
-            {item.description}
+        <li className={`${styles.searchResultItem}`}>
+            <a className={`${styles.searchResultLink}`} href={`/${item.slug}`}>
+                <div className={`${styles.resultContent}`}>
+                    <span className='resultTitle'>
+                        {item.title}
+                    </span>
+                    <span className='resultDetails'>
+                        {item.description}
+                    </span>
+                </div>
+            </a>
         </li>
     )
 }
