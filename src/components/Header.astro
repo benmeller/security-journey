@@ -34,8 +34,8 @@ import SearchWidget from './Search/SearchWidget.astro';
 	header {
 		margin: 0;
 		padding: 0 1em;
-		background: var(--background-color);
-		box-shadow: 0 2px 8px rgba(var(--black), 5%);
+		background: var(--primary-background);
+		box-shadow: 0 2px 8px color-mix(in srgb, var(--secondary-text), transparent 85%);
 	}
 	
 	h2 {
@@ -54,13 +54,13 @@ import SearchWidget from './Search/SearchWidget.astro';
 	}
 	nav a {
 		padding: 1em 0.5em;
-		color: var(--black);
+		color: var(--primary-text);
 		border-bottom: 4px solid transparent;
 		text-decoration: none;
 	}
 	nav a.active {
 		text-decoration: none;
-		border-bottom-color: var(--accent);
+		border-bottom-color: var(--primary);
 	}
 	.buttons,
 	.social-links,
