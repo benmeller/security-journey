@@ -74,6 +74,9 @@ body {
 	font-size: 18px;
 	line-height: 1.7;
 }
+body.modal-open {
+	overflow: hidden;
+}
 main {
 	width: 720px;
 	max-width: calc(100% - 2em);

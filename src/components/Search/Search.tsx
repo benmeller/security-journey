@@ -38,6 +38,7 @@ export default function Search({ searchList }: { searchList?: any}) {
 		  	onclose();
 		}
 		setIsOpen(false);
+		document.body.classList.remove('modal-open');
 	};
 
 	const handleDialogKeyDown = (event: React.KeyboardEvent<HTMLDialogElement>) => {
@@ -75,6 +76,7 @@ export default function Search({ searchList }: { searchList?: any}) {
 		}
 		if (isOpen) {
 			searchDialog.showModal();
+			document.body.classList.add('modal-open');
 		} else {
 			searchDialog.close();
 		}
