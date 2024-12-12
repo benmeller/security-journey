@@ -5,7 +5,7 @@ pubDate: 'Dec 1 2024'
 heroImage: '/blog-placeholder-4.jpg'
 ---
 
-## Responder Challenge Capture - Utilising `Responder`, `SMB` and Remote File Inclusion**  
+## Responder Challenge Capture - Utilising `Responder`, `SMB` and Remote File Inclusion
 
 This article is a high-level summary of the `Responder` challenge in HTB Starting Point Tier 1. It is purposely written as a high-level description in order to help myself conceptualise what is occurring in the exploit. To add some context to the challenge and to what is being achieved, we first begin by exploiting a PHP app that is unsafely using the `include()` function. Next, we attempt to utilise remote file inclusion to capture some NTLM credentials by triggering an SMB request back to our host machine. We capture the credentials by using the tool `Responder`, which sits listening for SMB connections.
 
