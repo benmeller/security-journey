@@ -36,7 +36,7 @@ These are the main options used in this tutorial:
 ```bash
 telnet <host>
 ftp <host>
-smbclient <host>
+smbclient <host as UNC path>
 ```
 
 FTP is unencrypted, sFTP is an extension of ssh to securely transfer files. You can try log in to an ftp server as user `anonymous` and simply enter an empty password. This may let you in. A status code of `230` indicates a successful login
