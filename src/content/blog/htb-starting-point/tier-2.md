@@ -95,7 +95,7 @@ Impacket is designed to deal with network packets, "providing low-level programm
 kali$ impacket-mssqlclient ARCHETYPE/sql_svc:M3g4c0rp123@$TARGET -windows-auth
 ```
 
-> TODO: Why windows-auth?
+> We need the `-windows-auth` flag because the account belongs to the machine, not to the SQL service. As per the help menu: "this flag is specified to use Windows Authentication". It's like when you run a DB on your windows machine - there is often a default provisioned account specific to SQL, alternatively, you can authenticate to the DB via your machine/domain controller.
 
 **Task 5**  
 What extended stored procedure of Microsoft SQL Server can be used in order to spawn a Windows command shell?
@@ -142,8 +142,6 @@ C:\Users\sql_svc\Downloads> .\winPEASx64.exe
 ```
 
 Looking through the output of winPEAS, we can take a look for anything interesting that we could easily leverage. Unfortunately for me, unlike the writeup for the box, winPEAS did not suggest the `ConsoleHost_History.txt` file. In any case, looking at the file, we find some credentials, as seen below. To gain admin, we can use the `runas` command
-
-TODO: more research on ConsoleHost_History.txt fle
 
 ```cmd
 C:\Users\sql_svc\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine>type ConsoleHost_history.txt
