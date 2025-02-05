@@ -491,3 +491,114 @@ af13b0bee69f8a877c3faf667f7beacf
 ```
 
 Job done!
+
+
+## Vaccine
+*Postgres, PHP, SQLi*
+
+**Task 1**  
+Besides SSH and HTTP, what other service is hosted on this box?  
+
+FTP as per nmap scan
+
+```bash
+kali$ nmap -sC $TARGET --min-rate=2000 | tee nmap-sc.txt
+Starting Nmap 7.94SVN ( https://nmap.org ) at 2025-02-05 11:13 AEDT
+Nmap scan report for 10.129.95.174
+Host is up (0.36s latency).
+Not shown: 997 closed tcp ports (reset)
+PORT   STATE SERVICE
+21/tcp open  ftp
+| ftp-syst:
+|   STAT:
+| FTP server status:
+|      Connected to ::ffff:10.10.15.41
+|      Logged in as ftpuser
+|      TYPE: ASCII
+|      No session bandwidth limit
+|      Session timeout in seconds is 300
+|      Control connection is plain text
+|      Data connections will be plain text
+|      At session startup, client count was 3
+|      vsFTPd 3.0.3 - secure, fast, stable
+|_End of status
+| ftp-anon: Anonymous FTP login allowed (FTP code 230)
+|_-rwxr-xr-x    1 0        0            2533 Apr 13  2021 backup.zip
+22/tcp open  ssh
+| ssh-hostkey:
+|   3072 c0:ee:58:07:75:34:b0:0b:91:65:b2:59:56:95:27:a4 (RSA)
+|   256 ac:6e:81:18:89:22:d7:a7:41:7d:81:4f:1b:b8:b2:51 (ECDSA)
+|_  256 42:5b:c3:21:df:ef:a2:0b:c9:5e:03:42:1d:69:d0:28 (ED25519)
+80/tcp open  http
+| http-cookie-flags:
+|   /:
+|     PHPSESSID:
+|_      httponly flag not set
+|_http-title: MegaCorp Login
+
+Nmap done: 1 IP address (1 host up) scanned in 17.06 seconds
+```
+
+**Task 2**  
+This service can be configured to allow login with any password for specific username. What is that username?  
+
+`anonymous`
+
+**Task 3**  
+What is the name of the file downloaded over this service?  
+
+`backup.zip`
+
+```bash
+kali$ ftp $TARGET
+Connected to 10.129.95.174.
+220 (vsFTPd 3.0.3)
+Name (10.129.95.174:malachi): anonymous
+331 Please specify the password.
+Password:
+230 Login successful.
+Remote system type is UNIX.
+Using binary mode to transfer files.
+ftp> ls
+229 Entering Extended Passive Mode (|||10511|)
+150 Here comes the directory listing.
+-rwxr-xr-x    1 0        0            2533 Apr 13  2021 backup.zip
+226 Directory send OK.
+ftp> get backup.zip
+local: backup.zip remote: backup.zip
+229 Entering Extended Passive Mode (|||10450|)
+150 Opening BINARY mode data connection for backup.zip (2533 bytes).
+100% |*************************************************************************************************************************************|  2533      489.24 KiB/s    00:00 ETA
+226 Transfer complete.
+2533 bytes received in 00:00 (6.83 KiB/s)
+ftp> pwd
+Remote directory: /
+```
+
+
+**Task 4**  
+What script comes with the John The Ripper toolset and generates a hash from a password protected zip archive in a format to allow for cracking attempts?  
+
+`zip2john`
+
+**Task 5**  
+What is the password for the admin user on the website?  
+
+1. Use John to crack zip (password: `741852963`)
+2. Read index file and we find md5 hash of admin password (md5: `2cb42f8734ea607eefed3b70af13bbd3`)
+3. Lookup unsalted md5 reverse to get `qwerty789`
+
+**Task 6**  
+What option can be passed to sqlmap to try to get command execution via the sql injection?  
+
+
+**Task 7**  
+What program can the postgres user run as root using sudo?  
+
+
+**Task 8**  
+Submit user flag  
+
+
+**Task 9**  
+Submit root flag  
