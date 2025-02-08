@@ -2,7 +2,7 @@
 title: 'Vaccine - HTB Starting Point Tier 2'
 description: 'Writeup for Vaccine box'
 pubDate: 'Feb 6 2025'
-heroImage: '/blog-placeholder-1.jpg'
+heroImage: '/blog-placeholder-3.jpg'
 ---
 
 ## Vaccine

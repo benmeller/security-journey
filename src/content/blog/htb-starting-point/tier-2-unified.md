@@ -2,7 +2,7 @@
 title: 'Unified - HTB Starting Point Tier 2'
 description: 'Writeup for Unified box'
 pubDate: 'Feb 8 2025'
-heroImage: '/blog-placeholder-1.jpg'
+heroImage: '/blog-placeholder-3.jpg'
 ---
 
 
