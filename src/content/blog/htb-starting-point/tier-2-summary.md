@@ -2,7 +2,7 @@
 title: 'HTB Starting Point - Tier 2'
 description: 'Hack the Box Starting Point'
 pubDate: 'Dec 13 2024'
-heroImage: '/blog-placeholder-3.jpg'
+heroImage: 'blog-placeholder-3.jpg'
 ---
 
 Topics covered:  

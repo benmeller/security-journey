@@ -2,7 +2,7 @@
 title: 'Harvesting NTLM Credentials'
 description: 'A summary of how to harvest NTLM credentials based on HTB Starting Point Tier 1 box "Responder"'
 pubDate: 'Dec 1 2024'
-heroImage: '/blog-placeholder-4.jpg'
+heroImage: 'blog-placeholder-4.jpg'
 ---
 
 ## Responder Challenge Capture - Utilising `Responder`, `SMB` and Remote File Inclusion

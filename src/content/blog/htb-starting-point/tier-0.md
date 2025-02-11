@@ -2,7 +2,7 @@
 title: 'HTB Starting Point - Tier 0'
 description: 'Hack the Box Starting Point'
 pubDate: 'Nov 19 2024'
-heroImage: '/blog-placeholder-3.jpg'
+heroImage: 'blog-placeholder-3.jpg'
 ---
 
 So begins my journey into HTB. I am starting right at the beginning. It means this will cover the basics, such as connecting anonymously to:

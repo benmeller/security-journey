@@ -2,7 +2,7 @@
 title: 'Obtain a Reverse Shell With PHP and Bash'
 description: 'A summary of how to obtain a reverse shell using basic PHP and Bash commands based on HTB Starting Point Tier 1 box "Three"'
 pubDate: 'Dec 5 2024'
-heroImage: '/blog-placeholder-5.jpg'
+heroImage: 'blog-placeholder-5.jpg'
 ---
 
 ## Obtain a reverse shell by arbitrary command execution in PHP

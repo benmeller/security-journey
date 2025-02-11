@@ -2,7 +2,7 @@
 title: 'Three - HTB Starting Point Tier 1'
 description: 'Writeup for Three box'
 pubDate: 'Dec 3 2024'
-heroImage: '/blog-placeholder-2.jpg'
+heroImage: 'blog-placeholder-2.jpg'
 ---
 
 ## Three
@@ -170,4 +170,4 @@ cat flag.txt
 <FLAG>
 ```
 
-Read a high level summary of this challenge [here](/blog/htb-starting-point/reverse-shell-php-and-bash/).
+Read a high level summary of this challenge [here](blog/htb-starting-point/reverse-shell-php-and-bash/).

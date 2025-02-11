@@ -2,7 +2,7 @@
 title: 'Responder - HTB Starting Point Tier 1'
 description: 'Writeup for Responder box'
 pubDate: 'Nov 29 2024'
-heroImage: '/blog-placeholder-2.jpg'
+heroImage: 'blog-placeholder-2.jpg'
 ---
 
 ## Responder 
@@ -122,4 +122,4 @@ responder\administrator
 <flag>
 ```
 
-Read a high level summary of this challenge [here](/blog/htb-starting-point/harvesting-ntlm-creds).
+Read a high level summary of this challenge [here](blog/htb-starting-point/harvesting-ntlm-creds).

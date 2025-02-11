@@ -8,6 +8,7 @@ import react from '@astrojs/react';
 
 // https://astro.build/config
 export default defineConfig({
-    site: 'https://example.com',
+    site: 'https://benmeller.github.io',
+    base: '/security-journey/',
     integrations: [mdx(), sitemap(), react()],
 });

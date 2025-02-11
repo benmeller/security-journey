@@ -2,7 +2,7 @@
 title: 'Crocodile - HTB Starting Point Tier 1'
 description: 'Writeup for Crocodile box'
 pubDate: 'Nov 26 2024'
-heroImage: '/blog-placeholder-2.jpg'
+heroImage: 'blog-placeholder-2.jpg'
 ---
 
 ## Crocodile

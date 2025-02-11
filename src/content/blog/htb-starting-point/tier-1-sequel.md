@@ -2,7 +2,7 @@
 title: 'Sequel - HTB Starting Point Tier 1'
 description: 'Writeup for Sequel box'
 pubDate: 'Nov 26 2024'
-heroImage: '/blog-placeholder-2.jpg'
+heroImage: 'blog-placeholder-2.jpg'
 ---
 
 ## Sequel

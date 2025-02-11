@@ -2,7 +2,7 @@
 title: 'Unified - HTB Starting Point Tier 2'
 description: 'Writeup for Unified box'
 pubDate: 'Feb 8 2025'
-heroImage: '/blog-placeholder-3.jpg'
+heroImage: 'blog-placeholder-3.jpg'
 ---
 
 
@@ -108,7 +108,7 @@ kali$ docker run -it -v $(pwd)/loot:/Log4jUnifi/loot -p 8090:8090 -p 1389:1389 l
 
 Success! We now have a foothold.
 
-![JNDI exploit success using the log4junifi poc](/public/img/blog/htb-starting-point/unified-jndi-exploit.png)
+![JNDI exploit success using the log4junifi poc](../../../../public/img/blog/htb-starting-point/unified-jndi-exploit.png)
 
 > Learning opportunity
 > TODO: Research how the exploit works. Beyond just the vulnerable field. The rogue JNDI stuff would be cool to understand

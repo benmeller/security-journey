@@ -2,7 +2,7 @@
 title: 'Cracking the Code: My Journey into Cybersecurity and Penetration Testing'
 description: 'Lorem ipsum dolor sit amet'
 pubDate: 'Jul 22 2022'
-heroImage: '/blog-placeholder-2.jpg'
+heroImage: 'blog-placeholder-2.jpg'
 draft: true
 ---
 

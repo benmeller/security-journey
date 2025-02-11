@@ -2,7 +2,7 @@
 title: 'Appointment - HTB Starting Point Tier 1'
 description: 'Writeup for Appointment box'
 pubDate: 'Nov 26 2024'
-heroImage: '/blog-placeholder-2.jpg'
+heroImage: 'blog-placeholder-2.jpg'
 ---
 
 

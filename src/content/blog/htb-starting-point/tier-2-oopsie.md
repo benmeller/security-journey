@@ -2,7 +2,7 @@
 title: 'Oopsie - HTB Starting Point Tier 2'
 description: 'Writeup for Oopsie box'
 pubDate: 'Jan 28 2025'
-heroImage: '/blog-placeholder-3.jpg'
+heroImage: 'blog-placeholder-3.jpg'
 ---
 
 ## Oopsie
@@ -57,7 +57,7 @@ What can be modified in Firefox to get access to the upload page?
 
 After logging in as guest on `http://$TARGET/cdn-cgi/login`, we are granted access to a web portal for MegaCorp Automotive - Repair Management System.
 
-![Guest access to the Repair Management System](/public/img/blog/htb-starting-point/oopsie-guest-access.png)
+![Guest access to the Repair Management System](../../../../public/img/blog/htb-starting-point/oopsie-guest-access.png)
 
 Inspecting the cookies, we see the following values. If we can find the user id for the super admin, we may be able to get access to the uploads page. 
 ```
@@ -73,7 +73,7 @@ user=34322
 ```
 
 Success!
-![Guest access to the Repair Management System](/public/img/blog/htb-starting-point/oopsie-uploads-access.png)
+![Guest access to the Repair Management System](../../../../public/img/blog/htb-starting-point/oopsie-uploads-access.png)
 
 
 **Task 4**  
