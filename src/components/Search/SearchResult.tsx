@@ -1,3 +1,4 @@
+import type { FuseResultMatch } from 'fuse.js';
 import styles from './searchResult.module.css';
 
 interface Item {
@@ -9,13 +10,10 @@ interface Item {
 
 interface SearchResult {
     item: Item,
-    matches: []
+    matches: readonly FuseResultMatch[] | undefined
 }
 
-
-export default function SearchResult({ result }: SearchResult) {
-    const { item, matches } = result
-    console.log(result);
+export default function SearchResult({ item, matches }: SearchResult) {
     return (
         <li className={`${styles.searchResultItem}`}>
             <a className={`${styles.searchResultLink}`} href={`/${item.slug}`}>

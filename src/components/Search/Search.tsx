@@ -1,4 +1,4 @@
-import Fuse from 'fuse.js';
+import Fuse, { type FuseResult } from 'fuse.js';
 import React, { useState, useEffect, useRef } from 'react';
 import styles from './search.module.css'
 import SearchResult from './SearchResult';
@@ -19,13 +19,13 @@ const options = {
 export default function Search({ searchList }: { searchList?: any}) {
 	const [query, setQuery] = useState('');
 	// TODO: Add type safety to SearchResults
-	const [results, setResults] = useState([]);
-	const [fuse, setFuse] = useState(null);
+	const [results, setResults] = useState<FuseResult<any>[]>([]);
+	const [fuse, setFuse] = useState<Fuse<any> | null>(null);
 	const searchRef = useRef<HTMLDialogElement | null>(null);
 	const [isOpen, setIsOpen] = useState(false);
 
-	function handleOnSearch({ target = {} }) {
-		const { value } = target;
+	function handleOnSearch(event: React.ChangeEvent<HTMLInputElement>) {
+		const { value } = event.target;
 		setQuery(value);
 		if (fuse) {
 			const searchResults = fuse.search(value);
@@ -34,9 +34,9 @@ export default function Search({ searchList }: { searchList?: any}) {
 	}
 
 	const handleCloseModal = () => {
-		if (onclose) {
-		  	onclose();
-		}
+		// if (onclose) {
+		//   	onclose();
+		// }
 		setIsOpen(false);
 		document.body.classList.remove('modal-open');
 	};
@@ -53,7 +53,7 @@ export default function Search({ searchList }: { searchList?: any}) {
 		}
 	}
 	
-	const handleKeyDown = (event: React.KeyboardEvent) => {
+	const handleKeyDown = (event: KeyboardEvent) => {
 		if (event.metaKey && event.key.toLowerCase() === 'k') {
 			setIsOpen(oldIsOpen => !oldIsOpen);
 	  }
@@ -61,7 +61,7 @@ export default function Search({ searchList }: { searchList?: any}) {
 
 	useEffect(() => {
 		// Fetch the JSON data
-		fetch('/api/posts.json')
+		fetch('api/posts.json')
 			.then(res => res.json())
 			.then(data => { 
 				setFuse(new Fuse(data, options)); 
@@ -125,7 +125,7 @@ export default function Search({ searchList }: { searchList?: any}) {
 					<ul className={`${styles.searchResults}`}>
 						{results &&
 							results.map((result) => (
-								<SearchResult result={result} />
+								<SearchResult item={result.item} matches={result.matches} />
 							))}
 					</ul>
 				</div>
