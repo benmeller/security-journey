@@ -18,10 +18,10 @@ export default function SearchResult({ item, matches }: SearchResult) {
         <li className={`${styles.searchResultItem}`}>
             <a className={`${styles.searchResultLink}`} href={`${item.slug}`}>
                 <div className={`${styles.resultContent}`}>
-                    <span className='resultTitle'>
+                    <span className={`${styles.resultTitle}`}>
                         {item.title}
                     </span>
-                    <span className='resultDetails'>
+                    <span className={`${styles.resultDetails}`}>
                         {item.description}
                     </span>
                 </div>

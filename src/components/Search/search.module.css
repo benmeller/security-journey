@@ -26,6 +26,7 @@ dialog::backdrop {
 }
 
 .dialogContent {
+    max-height: 75vh;
     padding: 0.55rem;
     width: 100%;
 }
@@ -44,17 +45,39 @@ dialog::backdrop {
     color: #8f959b;
 }
 
-.searchResults {
-    margin: 0;
-    padding: 0;
+.searchResultsContainer {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+.searchResultsCount {
+    color: var(--text-secondary);
+    font-size: 0.83rem;
+    margin: 0.2rem 0.2rem 1rem;
+}
+
+.searchResultsList {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin: 0;
+    padding: 0.5rem 1rem 1rem 1rem;
+    overflow-y: auto;
 }
 
 @media (max-width: 768px) {
     dialog {
         width: 100vw;
-        margin-top: 10rem;
+        margin: 2rem auto;
+    }
+
+    .dialogContent {
+        max-height: 85vh;
+    }
+
+    .searchResultsContainer {
+        max-height: 70vh;
     }
 }

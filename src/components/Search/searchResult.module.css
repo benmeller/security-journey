@@ -12,6 +12,9 @@
 .searchResultItem:focus-within {
     box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
     color: var(--primary-text);
+    scale: 102% 103%;
+    transition-timing-function: cubic-bezier(0.4, 0, 1, 1);
+    transition-duration: 35ms;
 }
 
 .searchResultLink {
@@ -31,4 +34,14 @@
 .resultContent {
     display: flex;
     flex-direction: column;
+}
+
+.resultDetails {
+    font-size: .83rem;
+    line-height: 1rem;
+}
+
+.resultTitle {
+    font-size: 1rem;
+    font-weight: 600;
 }

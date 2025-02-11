@@ -118,16 +118,20 @@ export default function Search({ searchList }: { searchList?: any}) {
 						aria-label='Search input'
 					/>
 					{query.length >= 1 && (
-						<p>
+						<p className={`${styles.searchResultsCount}`}>
 							Found {results.length} {results.length === 1 ? 'result' : 'results'} for '{query}'
 						</p>
 					)}
-					<ul className={`${styles.searchResults}`}>
-						{results &&
-							results.map((result) => (
-								<SearchResult item={result.item} matches={result.matches} />
-							))}
-					</ul>
+					{results.length >= 1 && (
+						<div className={`${styles.searchResultsContainer}`}>
+							<ul className={`${styles.searchResultsList}`}>
+								{results &&
+									results.map((result) => (
+										<SearchResult item={result.item} matches={result.matches} />
+									))}
+							</ul>
+						</div>
+					)}
 				</div>
 			</dialog>
 		</>
