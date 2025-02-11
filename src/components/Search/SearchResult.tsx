@@ -16,7 +16,7 @@ interface SearchResult {
 export default function SearchResult({ item, matches }: SearchResult) {
     return (
         <li className={`${styles.searchResultItem}`}>
-            <a className={`${styles.searchResultLink}`} href={`/${item.slug}`}>
+            <a className={`${styles.searchResultLink}`} href={`${item.slug}`}>
                 <div className={`${styles.resultContent}`}>
                     <span className='resultTitle'>
                         {item.title}
