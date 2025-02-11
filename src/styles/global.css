@@ -26,8 +26,9 @@
 	--primary-background: #FFFFFF;
 	--primary-background-gradient: var(--secondary-background), var(--primary-background);
 	--secondary-background: #E5E9F0;
+	--secondary-background-gradient: var(--primary-background), var(--secondary-background);
 	--accent-background: #2CA1DE;
-	
+
 	color: var(--secondary-text);
 	background-color: var(--primary-background);
 }
@@ -42,17 +43,18 @@ html.dark {
 	--gray-dark: rgb(229, 233, 240);
 	--gray-light: rgb(14, 20, 32);
 	--gray-gradient: #000, rgba(var(--background-color-rgb-values), 50%);
-	--box-shadow: 0 2px 6px rgba(var(--gray), 25%), 0 4px 4px rgba(var(--gray), 33%),
-		0 8px 4px rgba(var(--gray), 33%);
+	--box-shadow: 0 2px 6px rgba(0,0,0, 25%), 0 4px 4px rgba(0,0,0, 33%),
+		0 8px 4px rgba(0,0,0, 33%);
 
 	--primary: #2589BD;
 	--secondary: #09BC8A;
 	--tertiary: #CE8147;
 	--primary-text: #FFFFFF;
 	--secondary-text: #B0BDD3;
-	--primary-background: #10192C;
-	--primary-background-gradient: #000000, var(--primary-background);
+	--primary-background: #162036;
+	--primary-background-gradient: #1e1e2b, var(--primary-background);
 	--secondary-background: #0E1420;
+	--secondary-background-gradient: #000000, var(--secondary-background);
 	--accent-background: #1A658C;
 	--box-shadow: 0 10px 15px -3px rgba(200, 200, 200, 0.1), 0 4px 6px -4px rgba(200, 200, 200, 0.1);
 }
@@ -63,14 +65,14 @@ html.dark {
 
 @font-face {
 	font-family: 'Atkinson';
-	src: url('/fonts/atkinson-regular.woff') format('woff');
+	src: url('fonts/atkinson-regular.woff') format('woff');
 	font-weight: 400;
 	font-style: normal;
 	font-display: swap;
 }
 @font-face {
 	font-family: 'Atkinson';
-	src: url('/fonts/atkinson-bold.woff') format('woff');
+	src: url('fonts/atkinson-bold.woff') format('woff');
 	font-weight: 700;
 	font-style: normal;
 	font-display: swap;
