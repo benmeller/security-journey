@@ -5,7 +5,7 @@ dialog {
     box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.2), 0 8px 10px -6px rgb(0 0 0 / 0.2);
     color: var(--text-secondary);
     padding: 0;
-    margin-top: 10rem;
+    margin-top: 10vh;
     width: 600px;
 }
 
@@ -74,10 +74,10 @@ dialog::backdrop {
     }
 
     .dialogContent {
-        max-height: 85vh;
+        max-height: 90vh;
     }
 
     .searchResultsContainer {
-        max-height: 70vh;
+        max-height: 75vh;
     }
 }

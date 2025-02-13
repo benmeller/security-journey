@@ -13,7 +13,9 @@ const options = {
 	includeMatches: true,
 	includeScore: true,
 	minMatchCharLength: 2,
+	shouldSort: true,
 	threshold: 0.2,
+	// useExtendedSearch: true, // This disrupts any queries with whitespace since whitespace acts as an AND operator
 };
 
 export default function Search({ searchList }: { searchList?: any}) {
@@ -34,9 +36,6 @@ export default function Search({ searchList }: { searchList?: any}) {
 	}
 
 	const handleCloseModal = () => {
-		// if (onclose) {
-		//   	onclose();
-		// }
 		setIsOpen(false);
 		document.body.classList.remove('modal-open');
 	};
@@ -60,7 +59,6 @@ export default function Search({ searchList }: { searchList?: any}) {
 	}
 
 	useEffect(() => {
-		// Fetch the JSON data
 		fetch('api/posts.json')
 			.then(res => res.json())
 			.then(data => { 
@@ -91,8 +89,6 @@ export default function Search({ searchList }: { searchList?: any}) {
 	}, [])
 
 	// TODO: add close button to modal
-	// TODO: add styling
-	// TODO: Darken background
 
     return (
 		<>
@@ -109,14 +105,18 @@ export default function Search({ searchList }: { searchList?: any}) {
 			<dialog ref={searchRef} onKeyDown={handleDialogKeyDown} onClick={handleDialogClick} >
 				<div className={`${styles.dialogContent}`}>
 					{/* <label>Search</label> */}
-					<input 
-						type="text" 
-						value={query} 
-						onChange={handleOnSearch} 
-						placeholder="Search posts" 
-						className={`${styles.searchInput}`}
-						aria-label='Search input'
-					/>
+					{/* TODO: Add search icon to left of search field */}
+					{/* TODO: Add X to clear search query */}
+					<div className={`${styles.searchInputContainer}`}>
+						<input 
+							type="text" 
+							value={query} 
+							onChange={handleOnSearch} 
+							placeholder="Search posts" 
+							className={`${styles.searchInput}`}
+							aria-label='Search input'
+						/>
+					</div>
 					{query.length >= 1 && (
 						<p className={`${styles.searchResultsCount}`}>
 							Found {results.length} {results.length === 1 ? 'result' : 'results'} for '{query}'
@@ -127,7 +127,7 @@ export default function Search({ searchList }: { searchList?: any}) {
 							<ul className={`${styles.searchResultsList}`}>
 								{results &&
 									results.map((result) => (
-										<SearchResult item={result.item} matches={result.matches} />
+										<SearchResult query={query} item={result.item} matches={result.matches} />
 									))}
 							</ul>
 						</div>
