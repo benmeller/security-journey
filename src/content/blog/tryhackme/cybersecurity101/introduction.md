@@ -2,7 +2,7 @@
 title: 'TryHackMe Introduction - Cybersecurity 101'
 description: ''
 pubDate: 'Jun 21 2025'
-heroImage: 'blog-placeholder-2.jpg'
+heroImage: 'cs101-tryhackme.png'
 ---
 
 After a brief haitus, I am back to dive into some more cybersecurity learnings. My reflection after having worked through some of the HackTheBox exercises is that there are still some fundamentals that I need to learn. Therefore, the next port of call is TryHackMe. I've had this recommended by a few people, and it looks like it covers a lot of the basics. With that said, I'll be capturing my notes from the course in the next few posts. My goal is that these notes will provide a good reference for me to look back on (especially once I build a good and proper search for this site).

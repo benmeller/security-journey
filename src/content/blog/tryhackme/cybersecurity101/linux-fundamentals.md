@@ -2,7 +2,7 @@
 title: 'Linux Fundamentals - THM Cybersecurity 101'
 description: ''
 pubDate: 'Jun 30 2025'
-heroImage: 'blog-placeholder-2.jpg'
+heroImage: 'cs101-tryhackme.png'
 ---
 
 Since this lesson will cover a lot of things I already know, the details captured in this post may be fairly light on. Something I didn't know: Linux was first released in 1991! 
