@@ -51,9 +51,9 @@ html.dark {
 	--tertiary: #CE8147;
 	--primary-text: #FFFFFF;
 	--secondary-text: #B0BDD3;
-	--primary-background: #162036;
-	--primary-background-gradient: #1e1e2b, var(--primary-background);
-	--secondary-background: #0E1420;
+	--primary-background: #1f212e;
+	--primary-background-gradient: #191924, var(--primary-background);
+	--secondary-background: #293040;
 	--secondary-background-gradient: #000000, var(--secondary-background);
 	--accent-background: #1A658C;
 	--box-shadow: 0 10px 15px -3px rgba(200, 200, 200, 0.1), 0 4px 6px -4px rgba(200, 200, 200, 0.1);
