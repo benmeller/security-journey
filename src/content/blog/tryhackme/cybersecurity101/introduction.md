@@ -7,6 +7,8 @@ heroImage: 'blog-placeholder-2.jpg'
 
 After a brief haitus, I am back to dive into some more cybersecurity learnings. My reflection after having worked through some of the HackTheBox exercises is that there are still some fundamentals that I need to learn. Therefore, the next port of call is TryHackMe. I've had this recommended by a few people, and it looks like it covers a lot of the basics. With that said, I'll be capturing my notes from the course in the next few posts. My goal is that these notes will provide a good reference for me to look back on (especially once I build a good and proper search for this site).
 
+The goal is to complete 'Cybersecurity 101'.
+
 ## Offensive Security Intro
 
 Looks like this is going to cover `gobuster` for web enumeration. We've seen this before. It gives us a vm and a dummy site. It provides a lot of things for me. In this case, we'll use gobuster for path enumeration
@@ -63,4 +65,46 @@ Look through the SIEM for a suspicious IP and look it up in a tool like AbuseIPD
 
 
 ## Search Skills
-*TODO*
+
+This will cover: search engine skills, reading docs, social media and news outlets
+
+I mean, the basics are covered. When reading something, evaluate the source, the evidence and reasoning, as well as their objectivity and bias. Obviously something is more supported if the story is corroborated and consistent.
+
+**Search Engines**
+
+Useful tools:
+* "Quotes" can be used to find an exact match
+* `site:` limits the search results to a particular domain name.
+* `-<term>` omits any search results that contains `<term>`
+* `filetype:` allows you to search for a filetype such as PDF
+* 
+
+More details [here](https://github.com/cipher387/Advanced-search-operators-list), specific to each search (such as OS, mail servers, search engines). Also see my OSINT guide that was written a few years ago [here](https://github.com/benmeller/OSINT-Guide)
+
+
+**Specialized Search Engines**
+
+Beyond the regular search engines, there are many specialised tools. This lesson covered a few that look at servers and applications exposed to the internet, a virus search engine and ol' faithful `haveibeenpwned`:
+* [Shodan](https://www.shodan.io/): A search engine for internet-connected devices (such as servers, routers, webcams, IOT, etc.). It allows us to search for specific versions of servers or hardware based on the responses that the IP address returns.
+* [Censys](https://search.censys.io/): Similar to Shodan, but is more focused on higher level information (such as transport and application layers) or as the lesson put it "internet-connected hosts". This includes websites, certs, domain names, open ports.
+* [VirusTotal](https://www.virustotal.com/gui/home/upload): This collects a lot of virus scanning data and tells you what different products return for a given file, URL or hash.
+* [Have I Been Pwned](https://haveibeenpwned.com/): This site collects credentials that have been exposed in a data breach and allows a user to search their own credentials to check whether they are vulnerable.
+
+
+## Vulnerabilities and Exploits
+
+Common Vulnerabilities and Exposures (CVE) is a program that captures reported vulnerabilities for software and hardware that is used across the computing world. It provides a standard identifier for vulns in the format `CVE-YYYY-12345`. This provides a common name for everyone to refer to the vulnerability. It is maintained by MITRE. You can look up existing CVEs at [cve.org](https://www.cve.org/) or the [National Vulnerability Database](https://nvd.nist.gov/).
+
+Once vulnerabilities are found, you can often find POC exploits online. You may find these exploits on a code repository website such as GitHub. Alternatively, you can use the [Exploit Database](https://www.exploit-db.com/) which will list exploits from various authors.
+
+## Technical Docs
+
+* Linux manual: `man <tool>`
+* [Microsoft Learn - technical docs](https://learn.microsoft.com/en-gb/)
+* Product docs - such as Apache, Snort (IPS), Node, etc.
+
+Note to self: You're an engineer. You know this.
+
+## Social Media
+
+Social media is a treasure trove of information - from Facebook to LinkedIn, there is so much to learn - key contacts and locations, answers to security questions, and beyond! You can try creating an ephemeral email address to sign up to these sites and explore without having the data linked back to you. (See [10minutemail.com](https://10minutemail.com/))
