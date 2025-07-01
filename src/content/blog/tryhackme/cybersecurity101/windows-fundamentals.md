@@ -1,7 +1,7 @@
 ---
 title: 'Windows Fundamentals Part 1 - THM Cybersecurity 101'
 description: ''
-pubDate: 'Jun 31 2025'
+pubDate: 'Jul 1 2025'
 heroImage: 'cs101-tryhackme.png'
 ---
 
@@ -66,3 +66,13 @@ You can view existing user accounts on the system by:
 * Searching `Other users` in the start menu or system settings. 
 * Inspecting the directory `C:\Users`, which creates a folder when a user account is created and the user logs on to that machine
 * Using `Local User and Group Management` (or `lusrmgr.msc`)
+
+## User Account Control (UAC)
+
+UAC was introduced in Vista. The concept is that when an administrator user is using processes that don't require elevated permissions, then Windows will not grant it when the program is initially run. Only at a point where higher permissions are needed does it then prompt the user for admin access.
+
+## Other
+
+The rest of this lesson just covered settings/control panel, task manager. Not worth writing down any notes for that.
+
+And that brings us to the end of Windows Fundamentals Pt1.
