@@ -1,7 +1,7 @@
 ---
 title: 'Windows Fundamentals Part 2 - THM Cybersecurity 101'
 description: ''
-pubDate: 'Jul 2 2025'
+pubDate: 'Jul 3 2025'
 heroImage: 'cs101-tryhackme.png'
 ---
 
