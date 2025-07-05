@@ -63,5 +63,46 @@ Questions:
 * GoogleUpdateTaskMachineUA scheduled to run at 6:15AM
 * Hidden shared folder: `sh4r3dF0Ld3r`. (Note to self: is this hidden? Normally hidden folders end in `$`)
 
+### System Information
 
-More on this lesson coming soon...
+`msinfo32.exe` gives a summary of the hardware resources, system components (such as hardware devices like display and input) and software environment. The software environment shows information about the OS and software that is installed on the system, such as drivers, env vars, services, loaded modules, etc. To find the info you're after, you can use the search bar at the bottom.
+
+Questions:
+* `msinfo32.exe` opens System Information
+* System name is `THM-WINFUN2`
+* ComSpec env var: `%SystemRoot%\system32\cmd.exe`
+
+### Resource Monitor
+
+`resmon.exe` displays metrics such as CPU, memory, disk and network usage information. It can also show in-use file handles and modules. All of these things can be displayed per process, or as an aggregation. It also includes a feature to look for deadlocked processes.
+
+### Command Prompt
+
+You know this one. What engineer doesn't? As mentioned in the lesson, some useful commands:
+* `hostname`
+* `whoami`
+* `ipconfig`
+* `netstat`: Display protocol stats and current TCP/IP connections, similar to Linux (though we should use `ss` in linux nowadays)
+* `net`: Manage network resources - such as users on the computer
+
+The help menu for a command can be retrieved using `/?`.
+
+Questions:
+* Full command in System Configuration for Internet Protocol Configuration: `C:\Windows\System32\cmd.exe /k %windir%\system32\ipconfig.exe`
+* Show detailed info in `ipconfig` using the arg `/all`
+
+### Registry Editor
+
+The Windows Registry is a "central hierarchical database used to store information necessary to configure the system for one or more users, applications, and hardware devices". As Windows operates, it continually refers back to the registry to check information related to:
+* User profiles
+* Installed applications (and the document types it can create)
+* What hardware exists on the system
+* In-use ports
+* A property sheet that stores settings for application and folder icons
+
+Questions:
+* `regedt32.exe` or `regedit.exe` can be used to open the registry editor
+
+---
+
+That was a whirlwind tour of the Windows System Configuration tool and brings us to the end of the Windows Fundamentals pt2 room. OF all the tools we looked at, some of them have shortcuts in the Start menu.
